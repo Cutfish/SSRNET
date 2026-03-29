@@ -1,8 +1,10 @@
 import time
+from datetime import datetime
 import torch
 import torch.backends.cudnn as cudnn
 import torch.optim
 from torch import nn
+from torch.utils.tensorboard import SummaryWriter
 from models.SSRNET import SSRNET
 from models.SingleCNN import SpatCNN, SpecCNN
 from models.TFNet import TFNet, ResTFNet
@@ -44,6 +46,11 @@ def main():
       args.n_bands = 200
     elif args.dataset == 'Washington':
       args.n_bands = 191
+
+    # Initialize TensorBoard Writer and metrics log file
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    writer = SummaryWriter(f'./runs/{args.dataset}_{args.arch}_{timestamp}')
+    log_file = f'{args.dataset}_{args.arch}_metrics_{timestamp}.txt'
 
     # Build the models
     if args.arch == 'SSFCNN':
@@ -94,7 +101,10 @@ def main():
                                 args.arch,
                                 model,
                                 0,
-                                args.n_epochs)
+                                args.n_epochs,
+                                writer=writer,
+                                dataset=args.arch,
+                                log_file=log_file)
         print ('psnr: ', recent_psnr)
 
     best_psnr = 0
@@ -102,7 +112,10 @@ def main():
                           args.arch, 
                           model,
                           0,
-                          args.n_epochs)
+                          args.n_epochs,
+                          writer=writer,
+                          dataset=args.arch,
+                          log_file=log_file)
     print ('psnr: ', best_psnr)
 
     # Epochs
@@ -127,7 +140,10 @@ def main():
                                 args.arch,
                                 model,
                                 epoch,
-                                args.n_epochs)
+                                args.n_epochs,
+                                writer=writer,
+                                dataset=args.arch,
+                                log_file=log_file)
         print ('psnr: ', recent_psnr)
 
         # # save model
@@ -139,6 +155,9 @@ def main():
           print ('')
 
     print ('best_psnr: ', best_psnr)
+    
+    # Close TensorBoard Writer
+    writer.close()
 
 if __name__ == '__main__':
     main()
