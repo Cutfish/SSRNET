@@ -69,4 +69,4 @@ def printImg():
     image.save("PaviaU.png")
 
 if __name__ == '__main__':
-    printImg()
+    printDataset()

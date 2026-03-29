@@ -13,10 +13,10 @@ class SSRNET(nn.Module):
                  n_bands):
         """Load the pretrained ResNet and replace top fc layer."""
         super(SSRNET, self).__init__()
-        self.scale_ratio = scale_ratio
-        self.n_bands = n_bands
-        self.arch = arch
-        self.n_select_bands = n_select_bands
+        self.scale_ratio = scale_ratio # 缩放比例
+        self.n_bands = n_bands # 总共的光谱数量
+        self.arch = arch # 选择的架构
+        self.n_select_bands = n_select_bands # 选择的光谱数量
         self.weight = nn.Parameter(torch.tensor([0.5]))
 
         self.conv_fus = nn.Sequential(
