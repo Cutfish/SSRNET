@@ -5,7 +5,6 @@ This is the code of X. Zhang, W. Huang, Q. Wang, and X. Li, “SSR-NET: Spatial-
 
 # 运行指令
 
-
 ```shell
 # 运行项目
 conda run -n ssrnet python main.py -dataset PaviaU -arch SSRNET --n_epochs 1000
